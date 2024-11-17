@@ -1,4 +1,7 @@
-# spotify_extract.py
+# spotify_extract_old.py
+
+# This Python file is the original script to extract data from Spotify.
+# I've improved the script with a new version.
 
 import json
 import os
@@ -28,8 +31,11 @@ spotify_data = sp.playlist_tracks(playlist_URI)
 # Create a filename with the current timestamp
 filename = "spotify_raw_" + datetime.now().strftime("%Y%m%d_%H%M%S") + ".json"
 
+# Construct the full file path
+output_dir = os.path.join("../raw_data", filename)
+
 # Save the data locally
-with open(filename, 'w', encoding='utf-8') as f:
+with open(output_dir, 'w', encoding='utf-8') as f:
     json.dump(spotify_data, f, ensure_ascii=False, indent=4)
 
-print(f"Data successfully saved to {filename}")
+print(f"Data successfully saved to {output_dir}")

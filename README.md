@@ -18,8 +18,8 @@ Follow these instructions to set up and run the project on your local machine.
 #### 1. Clone the repository
 
 ```bash
-git clone https://github.com/your-username/your-repo-name.git
-cd your-repo-name
+git clone https://github.com/longnca/Spotify-download.git
+cd Spotify-download
 ```
 
 #### 2. Create and activate a virtual environment
@@ -40,6 +40,15 @@ source venv/bin/activate
 
 ```bash
 pip install -r requirements.txt
+```
+
+### How to use the Python files for ETL process
+
+Run `python .\file_name.py` in the command line.
+
+For example:
+```bash
+python .\spotify_extract.py
 ```
 
 ### Deactivating the Virtual Environment

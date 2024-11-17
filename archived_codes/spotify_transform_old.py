@@ -1,4 +1,4 @@
-# spotify_transform.py
+# spotify_transform_old.py
 
 import os
 import json
@@ -56,8 +56,8 @@ def song(data):
 # Main function to process local files
 def main():
     # Input and output directories
-    input_dir = "./raw_data"
-    output_dir = "./transformed_data"
+    input_dir = "../raw_data"
+    output_dir = "../transformed_data"
 
     # Ensure output directories exist
     os.makedirs(f"{output_dir}/song_data", exist_ok=True)
