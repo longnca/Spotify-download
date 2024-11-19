@@ -1,4 +1,6 @@
-# spotify_transform.py
+# spotify_transform_artists_relationships.py
+
+# This file transforms: track, artists, and their relationships.
 
 import json
 import pandas as pd
@@ -7,8 +9,8 @@ import os
 # Load the JSON data
 
 # Input and output directories
-input_dir = "./raw_data"
-output_dir = "./transformed_data"
+input_dir = "../raw_data"
+output_dir = "../transformed_data"
 os.makedirs(output_dir, exist_ok=True)
 
 # List all JSON files in the directory

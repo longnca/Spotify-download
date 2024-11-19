@@ -1,6 +1,7 @@
-# spotify_extract.py
+# spotify_extract_multiple_playlists_hardcoded.py
 
-# This file is to extract data from MULTIPLE playlists.
+# This file is to extract data from MULTIPLE playlists that are hard-coded.
+# This file also extract tracks, artisits, and related artists.
 
 import json
 import os
@@ -64,9 +65,9 @@ def fetch_tracks_from_playlists(playlist_ids):
                             # fetch artisit info for genres and popularity
                             artist_info = sp.artist(artist_id)
                             artist_details[artist_id] = {
-                                "name": artist_info.get("name"),
-                                "genres": artist_info.get("genres", []),
-                                "popularity": artist_info.get("popularity", None),
+                                "artist_name": artist_info.get("name"),
+                                "artist_genres": artist_info.get("genres", []),
+                                "artist_popularity": artist_info.get("popularity", None),
                             }
                             time.sleep(0.1)
 
@@ -112,8 +113,8 @@ def main():
     # Sample playlists to fetch data
     playlist_ids = [
         "37i9dQZEVXbKj23U1GF4IR",  # Top 50 Canada
-        # "37i9dQZF1DXcBWIGoYBM5M",  # Global Top 50
-        # "37i9dQZF1DWXRqgorJj26U",  # Chill Hits
+        "37i9dQZF1DXcBWIGoYBM5M",  # Global Top 50
+        "37i9dQZF1DWXRqgorJj26U",  # Chill Hits
     ]
 
     # Fetch playlist tracks
@@ -121,7 +122,7 @@ def main():
 
     # Create output filename
     filename = "spotify_raw_tracks_" + datetime.now().strftime("%Y%m%d_%H%M%S") + ".json"
-    output_dir = "./raw_data"
+    output_dir = "../raw_data"
 
     # Save data to file
     save_data_to_file(spotify_data, output_dir, filename)
