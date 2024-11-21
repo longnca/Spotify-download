@@ -26,7 +26,7 @@ YEAR_START = 2000
 YEAR_END = 2001
 
 # choose the limit of playlists per year that you want to fetch
-PLAYLIST_LIMIT =
+PLAYLIST_LIMIT = 10
 
 # Setup logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
@@ -72,7 +72,11 @@ def fetch_tracks_batch(playlist_id):
         for item in results['items']:
             track = item['track']
             if track:
-                all_tracks.append(track)
+                # Log a warning if a track doesn't have an ID
+                if not track.get('id'):
+                    logging.warning(f"Track without ID found in playlist {playlist_id}: {track}")
+                else:
+                    all_tracks.append(track)
 
         # Respect API rate limits by pausing if needed
         time.sleep(0.1)
@@ -80,16 +84,22 @@ def fetch_tracks_batch(playlist_id):
 
     return all_tracks
 
+
 def fetch_audio_features_batch(track_ids):
     """
     Fetch audio features for a list of track IDs in batches.
+    Spotify API allows up to 100 IDs per request so we can set the batch size up to 100.
 
     :param track_ids: list of track IDs that contain audio features.
     :return: dict of audio features with track IDs as keys.
     """
     logging.info(f"Fetching audio features for {len(track_ids)} tracks")
+
+    # filter out any None values from track_ids
+    track_ids = [track_id for track_id in track_ids if track_id]
+
     audio_features = {}
-    batch_size = 100  # note: Spotify API allows up to 100 IDs per request
+    batch_size = 100
 
     for i in range(0, len(track_ids), batch_size):
         batch_ids = track_ids[i:i + batch_size]
@@ -118,7 +128,7 @@ def fetch_tracks_from_playlists(playlist_ids):
         tracks = fetch_tracks_batch(playlist_id)
         all_tracks.extend(tracks)
 
-    # deduplicate track IDs
+    # deduplicate track IDs to only contain unique track IDs
     track_ids = list({track['id'] for track in all_tracks if track['id'] not in seen_track_ids})
     seen_track_ids.update(track_ids)
 
