@@ -39,6 +39,12 @@ with open(input_file, 'r', encoding='utf-8') as f:
 tracks = []
 for track in data:
     audio_features = track.get("audio_features", {})
+
+    # extract the year from the release date
+    album_release_date = track["album"]["release_date"]
+    release_year = album_release_date.split("-")[0] if album_release_date else None
+
+    # append all details from JSON
     tracks.append({
         "track_id": track["id"],
         "track_name": track["name"],
@@ -47,7 +53,7 @@ for track in data:
         "duration_ms": track["duration_ms"],
         "explicit": track["explicit"],
         "album_name": track["album"]["name"],
-        "album_release_date": track["album"]["release_date"],
+        "year": release_year,
         "album_type": track["album"]["album_type"],
         "danceability": audio_features.get("danceability", None),
         "energy": audio_features.get("energy", None),
