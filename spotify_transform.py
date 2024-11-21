@@ -42,6 +42,7 @@ for track in data:
     tracks.append({
         "track_id": track["id"],
         "track_name": track["name"],
+        "artist_names": ", ".join([name for name in track.get("artist_names", []) if name]),
         "popularity": track["popularity"],
         "duration_ms": track["duration_ms"],
         "explicit": track["explicit"],
@@ -60,7 +61,6 @@ for track in data:
         "valence": audio_features.get("valence", None),
         "tempo": audio_features.get("tempo", None),
         "time_signature": audio_features.get("time_signature", None),
-        "artist_names": ", ".join(track.get("artist_names", [])),  # Concatenate artist names into a single string
     })
 
 # convert the extracted data into a DataFrame
