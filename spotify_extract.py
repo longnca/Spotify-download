@@ -21,6 +21,13 @@ from datetime import datetime
 import time
 import logging
 
+# choose the range of the years that you want to fetch data
+YEAR_START = 2000
+YEAR_END = 2001
+
+# choose the limit of playlists per year that you want to fetch
+PLAYLIST_LIMIT =
+
 # Setup logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
@@ -128,7 +135,7 @@ def fetch_tracks_from_playlists(playlist_ids):
     return all_tracks
 
 
-def fetch_tracks_from_playlists_by_year(year_range, limit_per_year=5):
+def fetch_tracks_from_playlists_by_year(year_range, limit_per_year=PLAYLIST_LIMIT):
     """
     Fetch tracks, audio features, and artist details dynamically based on a range of years.
 
@@ -183,8 +190,6 @@ def main():
     start_time = time.time()  # start timing the main function
 
     # define year range
-    YEAR_START = 2000
-    YEAR_END = 2002
     year_range = range(YEAR_START, YEAR_END + 1)
 
     # fetch tracks dynamically by year
