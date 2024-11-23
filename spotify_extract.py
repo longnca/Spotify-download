@@ -22,11 +22,11 @@ import time
 import logging
 
 # choose the range of the years that you want to fetch data
-YEAR_START = 1920
-YEAR_END = 1921
+YEAR_START = 1910
+YEAR_END = 1919
 
 # choose the limit of playlists per year that you want to fetch
-PLAYLIST_LIMIT = 10
+PLAYLIST_LIMIT = 50
 
 # Setup logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
@@ -41,7 +41,7 @@ client_credentials_manager = SpotifyClientCredentials(client_id=client_id, clien
 sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 
 
-def fetch_playlists_by_year(year, limit=10, query_template="{year}"):
+def fetch_playlists_by_year(year, limit=PLAYLIST_LIMIT, query_template="{year}"):
     """
     Search for playlists containing a specific year in their title.
 
@@ -54,12 +54,18 @@ def fetch_playlists_by_year(year, limit=10, query_template="{year}"):
     query = query_template.format(year=year)
     results = sp.search(q=query, type='playlist', limit=limit)
 
-    # Log the response to understand why it might be None
+    # log the response to understand why it might be None
     if not results or 'playlists' not in results or 'items' not in results['playlists']:
         logging.warning(f"No playlists found for year {year}. API response: {results}")
-        return []  # Return an empty list if no playlists are found
+        return []
 
-    playlist_ids = [playlist['id'] for playlist in results['playlists']['items']]
+    # filter playlists to include only those where the title contains the year
+    playlist_ids = [
+        playlist['id']
+        for playlist in results['playlists']['items']
+        if str(year) in playlist['name']
+    ]
+
     logging.info(f"Found {len(playlist_ids)} playlists for year {year}")
     return playlist_ids
 
@@ -82,7 +88,7 @@ def fetch_tracks_batch(playlist_id):
             if track and track.get('id'):
                 all_tracks.append(track)
 
-        # Respect API rate limits by pausing if needed
+        # pause (if needed) to respect API rate limits of Spotify
         time.sleep(0.1)
         results = sp.next(results) if results['next'] else None
 
@@ -108,7 +114,7 @@ def fetch_audio_features_batch(track_ids):
     for i in range(0, len(track_ids), batch_size):
         batch_ids = track_ids[i:i + batch_size]
         features = sp.audio_features(batch_ids)
-        time.sleep(0.2)  # pause to respect API rate limits of Spotify
+        time.sleep(0.2)
 
         for feature in features:
             if feature:
@@ -221,7 +227,7 @@ def main():
                 + str(YEAR_START)
                 + "-"
                 + str(YEAR_END)
-                + "-"
+                + "_"
                 + datetime.now().strftime("%Y%m%d_%H%M%S")
                 + ".json")
     output_dir = "./raw_data"
