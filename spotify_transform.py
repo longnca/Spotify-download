@@ -72,8 +72,9 @@ for track in data:
 # convert the extracted data into a DataFrame
 tracks_df = pd.DataFrame(tracks)
 
-# create a timestamped filename
-filename = "spotify_dataset_" + datetime.now().strftime("%Y%m%d_%H%M%S") + ".csv"
+# create the output filename based on the input filename, changing .json to .csv
+base_filename = os.path.splitext(json_files[0])[0]  # Remove the .json extension
+filename = base_filename + ".csv"  # Add the .csv extension
 tracks_csv_path = os.path.join(output_dir, filename)
 
 # save the DataFrame to a CSV file
